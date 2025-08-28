@@ -1,6 +1,4 @@
 from sqlmodel import SQLModel, Field
-from sqlalchemy import JSON
-from typing import List
 
 
 class Users(SQLModel, table=True):
@@ -8,6 +6,7 @@ class Users(SQLModel, table=True):
     telegram_id: int
     language: str = Field(nullable=True, default='RU')
     translate: str = Field(nullable=True)
+    is_check_mode: bool = Field(nullable=True, default=False)
 
 
 class RussianWords(SQLModel, table=True):
@@ -20,3 +19,9 @@ class ItalianWords(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     word: str
     translate: str
+
+
+class Shop(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    name: str
+    price: int

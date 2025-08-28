@@ -7,12 +7,11 @@ from database.utils import get_records
 
 
 def init_cache():
-    with Session() as session:
-        ru_words = get_records(session, RussianWords)
-        it_words = get_records(session, ItalianWords)
+    ru_words = get_records(RussianWords)
+    it_words = get_records(ItalianWords)
 
-        Cache.ru_words = ru_words
-        Cache.it_words = it_words
+    Cache.ru_words = ru_words
+    Cache.it_words = it_words
 
 
 def load_cache(func):

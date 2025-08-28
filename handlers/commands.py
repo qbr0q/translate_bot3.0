@@ -20,3 +20,14 @@ def register_command_handlers(bot):
     @load_cache
     def skip_handler(message):
         skip(bot, message)
+
+    @bot.message_handler(commands=['check_mode'])
+    @load_cache
+    def check_mode(message):
+        if Cache.user.is_check_mode:
+            Cache.user.is_check_mode = False
+            bot.send_message(message.chat.id, 'Режим проверки слов выключен')
+        else:
+            Cache.user.is_check_mode = True
+            bot.send_message(message.chat.id, 'Вы в режиме проверки слов. Чтобы выключить режим,'
+                                      ' используйте /check_mode')

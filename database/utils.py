@@ -1,5 +1,6 @@
 from sqlalchemy import select
 
+from database import Session
 from database.models import Users
 
 
@@ -19,5 +20,6 @@ def insert_record(session, record):
     session.refresh(record)
 
 
-def get_records(session, table):
-    return session.query(table).all()
+def get_records(table):
+    with Session() as session:
+        return session.query(table).all()

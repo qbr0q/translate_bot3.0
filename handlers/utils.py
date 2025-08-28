@@ -8,10 +8,6 @@ from database.utils import insert_record
 
 
 def skip(bot, message):
-    try:
-        lan = Cache.user.language
-    except Exception as e:
-        print()
     lan = Cache.user.language
     word_obj = None
 
@@ -27,3 +23,10 @@ def skip(bot, message):
     ))
 
     bot.send_message(message.chat.id, f'Слово для перевода - {word_obj.word}', reply_markup=markup)
+
+
+def check_word(word):
+    ru_words = [i.word for i in Cache.ru_words]
+    it_words = [i.word for i in Cache.it_words]
+
+    return word in ru_words or word in it_words
