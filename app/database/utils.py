@@ -1,15 +1,15 @@
 from sqlalchemy import select
 
-from database import Session
-from database.models import Users
+from app.database import Session
+from app.database.models import User
 
 
 def init_user(session, user_id):
     user = session.scalar(
-        select(Users).where(Users.telegram_id == user_id)
+        select(User).where(User.telegram_id == user_id)
     )
     if user is None:
-        user = Users(telegram_id=user_id)
+        user = User(telegram_id=user_id)
         insert_record(session, user)
     return user
 

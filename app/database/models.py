@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field
 
 
-class Users(SQLModel, table=True):
+class User(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     telegram_id: int
     language: str = Field(nullable=True, default='RU')
@@ -25,3 +25,4 @@ class Shop(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str
     price: int
+    callback: str

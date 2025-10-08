@@ -1,24 +1,11 @@
-import telebot
-import os
-from dotenv import load_dotenv
-
-from database import init_db
-from handlers import register_handlers
-from cache.cache import init_cache
-
-
-load_dotenv("config.env")
-TOKEN = os.getenv('TOKEN')
-
-bot = telebot.TeleBot(TOKEN)
+from app import init_app, create_bot
 
 
 def main():
-    init_db()
-    init_cache()
-    register_handlers(bot)
+    init_app(bot)
     bot.infinity_polling()
 
 
 if __name__ == "__main__":
+    bot = create_bot()
     main()
