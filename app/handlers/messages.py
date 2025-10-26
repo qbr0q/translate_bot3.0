@@ -1,6 +1,6 @@
 from app.cache import load_cache
-from app.handlers.utils import to_it_handler, to_ru_handler, shop_handler,\
-    check_mode_handler, other_mes_handler
+from app.handlers.utils.handlers_utils import to_it_handler, to_ru_handler, shop_handler,\
+    check_mode_handler, other_mes_handler, inventory_handler
 
 
 def register_message_handlers(bot):
@@ -12,7 +12,8 @@ def register_message_handlers(bot):
         handlers_dict = {
             'RU -> IT': to_it_handler,
             'IT -> RU': to_ru_handler,
-            'Магазин': shop_handler
+            'Магазин': shop_handler,
+            'Инвентарь': inventory_handler
         }
         if user.is_check_mode:
             handler = check_mode_handler
