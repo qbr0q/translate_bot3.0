@@ -1,6 +1,6 @@
 from app.database import Session
-from app.database.models import RussianWords, ItalianWords
-from app.database.utils import get_records, init_user
+from app.database.models import RussianWord, ItalianWord
+from app.database.utils import get_table_records, init_user
 
 
 class Cache:
@@ -40,8 +40,8 @@ class Cache:
 
 
 def init_cache():
-    for lang, model in [('ru', RussianWords), ('it', ItalianWords)]:
-        objs = get_records(model)
+    for lang, model in [('ru', RussianWord), ('it', ItalianWord)]:
+        objs = get_table_records(model)
         setattr(Cache, f"{lang}_words_objects", objs)
         setattr(Cache, f"{lang}_words_list", [obj.word for obj in objs])
 

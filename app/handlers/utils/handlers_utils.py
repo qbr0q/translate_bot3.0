@@ -1,31 +1,8 @@
 from telebot import types
-from random import choice
 
-from app.cache import Cache
-from app.database.utils import get_records
-from app.database.models import Shop
-
-
-def skip(bot, message, user):
-    lan = Cache.user.language
-    word_obj = None
-
-    if lan == 'RU':
-        word_obj = choice(Cache.ru_words_objects)
-    elif lan == 'IT':
-        word_obj = choice(Cache.it_words_objects)
-    Cache.user.translate = word_obj.translate
-
-    markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton(
-        'Показать перевод', callback_data='translated-word'
-    ))
-
-    bot.send_message(message.chat.id, f'Слово для перевода - {word_obj.word}', reply_markup=markup)
-
-
-def check_word(word):
-    return word in Cache.ru_words_list or word in Cache.it_words_list
+from app.handlers.utils import skip, check_word
+from app.database.utils import get_records, get_table_records
+from app.database.models import UserItem, Item
 
 
 def to_it_handler(message, bot, user):
@@ -41,7 +18,7 @@ def to_ru_handler(message, bot, user):
 
 
 def shop_handler(message, bot, user):
-    shop_items = get_records(Shop)
+    shop_items = get_table_records(Item)
     markup = types.InlineKeyboardMarkup()
 
     for shop_item in shop_items:
@@ -70,10 +47,16 @@ def check_mode_handler(message, bot, user):
     bot.send_message(message.chat.id, responses[is_word_recorded])
 
 
-def translate_callback(call, bot, user):
-    bot.send_message(call.message.chat.id, f'Перевод слова - {user.translate}')
-    skip(bot, call.message, user)
+def inventory_handler(message, bot, user):
+    markup = types.InlineKeyboardMarkup()
+    user_items = get_records(UserItem, user_id=user.id)
 
+    for user_item in user_items:
+        markup.add(types.InlineKeyboardButton(
+            f'{user_item.item.name} | {user_item.amount} шт.',
+            callback_data=user_item.item.callback
+        ))
 
-def half_callback(call, bot, user):
-    pass
+    bot.send_message(
+        message.chat.id, '--- Инвентарь ---', reply_markup=markup
+    )
