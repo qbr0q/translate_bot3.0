@@ -1,6 +1,6 @@
 from telebot import types
 
-from app.cache import load_cache
+from app.cache import load_cache, Cache
 from app.handlers.utils import skip
 from app.handlers.command.utils import MODEL_TO_COMMAND_MAP
 from app.database.utils import commit_record
@@ -33,20 +33,14 @@ def register_command_handlers(bot):
             bot.send_message(message.chat.id, 'Вы в режиме проверки слов. Чтобы выключить режим,'
                                       ' используйте /check_mode')
 
-    @bot.message_handler(commands=['help'])
-    def help_mess(message):
-        mess_help = '/username - узнать или установить юзернейм (/username name)\n' \
-                    '/bet - засандалить сочную ставочку (/bet ставка+цвет)\n' \
-                    '/balance - узнать баланс\n' \
-                    '/give - передать баланс (ответить на сообщение получателя)'
-        bot.send_message(chat_id=message.chat.id, text=mess_help)
-
-
     @bot.message_handler(commands=['add_ru', 'add_it'])
     def add_ru(message):
         command, message_body = message.text.split(" ", 1)
         words = message_body.split(" - ")
         word = words[0]
+        if word in Cache.ru_words_list or word in Cache.it_words_list:
+            bot.send_message(chat_id=message.chat.id, text="Слово уже есть в базе")
+            return
         translate = words[1:]
         model = MODEL_TO_COMMAND_MAP.get(command)
 
@@ -55,7 +49,13 @@ def register_command_handlers(bot):
 
         bot.send_message(chat_id=message.chat.id, text="Слово добавлено!")
 
-
+    @bot.message_handler(commands=['help'])
+    def help_mess(message):
+        mess_help = '/username - узнать или установить юзернейм (/username name)\n' \
+                    '/bet - засандалить сочную ставочку (/bet ставка+цвет)\n' \
+                    '/balance - узнать баланс\n' \
+                    '/give - передать баланс (ответить на сообщение получателя)'
+        bot.send_message(chat_id=message.chat.id, text=mess_help)
 
     @bot.message_handler(func=lambda message: message.text.startswith('/'))
     def unknown_command(message):
