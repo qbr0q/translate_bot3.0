@@ -52,10 +52,11 @@ def inventory_handler(message, bot, user):
     user_items = get_records(UserItem, user_id=user.id)
 
     for user_item in user_items:
-        markup.add(types.InlineKeyboardButton(
-            f'{user_item.item.name} | {user_item.amount} шт.',
-            callback_data=user_item.item.callback
-        ))
+        if user_item.amount:
+            markup.add(types.InlineKeyboardButton(
+                f'{user_item.item.name} | {user_item.amount} шт.',
+                callback_data=user_item.item.callback
+            ))
 
     bot.send_message(
         message.chat.id, '--- Инвентарь ---', reply_markup=markup

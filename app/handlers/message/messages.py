@@ -1,5 +1,5 @@
 from app.cache import load_cache
-from app.handlers.utils.handlers_utils import to_it_handler, to_ru_handler, shop_handler,\
+from app.handlers.message.utils import to_it_handler, to_ru_handler, shop_handler,\
     check_mode_handler, other_mes_handler, inventory_handler
 
 
